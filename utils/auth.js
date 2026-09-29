@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const secret = process.env.JWT_SECRET;
+const getSecret = () => process.env.JWT_SECRET;
 const expiration = '2h';
 
 export default {
@@ -16,7 +16,7 @@ export default {
         }
 
         try {
-            const { data } = jwt.verify(token, secret, { maxAge: expiration });
+            const { data } = jwt.verify(token, getSecret(), { maxAge: expiration });
             req.user = data;
         } catch {
             console.log('Invalid token');
@@ -28,6 +28,6 @@ export default {
     signToken: function ({ username, email, _id }) {
         const payload = { username, email, _id };
 
-        return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
+        return jwt.sign({ data: payload }, getSecret(), { expiresIn: expiration });
     },
 };
