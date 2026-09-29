@@ -11,6 +11,16 @@ const noteSchema = new Schema({
         type: String,
         required: true,
     },
+    // Associate note with its owner
+    // type: Schema.Types.ObjectId -> stores a MongoDB ObjectId
+    // ref: 'User'                 -> references the User model (enables populate)
+    // required: true              -> every note MUST have an owner
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    // ------------------------------------------------
     createdAt: {
         type: Date,
         default: Date.now,
