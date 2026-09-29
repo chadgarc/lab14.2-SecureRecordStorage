@@ -5,7 +5,8 @@ const expiration = '2h';
 
 export default {
     authMiddleware: function (req, res, next) {
-        let token = req.body.token || req.query.token || req.headers.authorization;
+        // Check multiple sources for token: body, query, or Authorization header
+        let token = (req.body && req.body.token) || req.query.token || req.headers.authorization;
 
         if (req.headers.authorization) {
             token = token.split(' ').pop().trim();
