@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { Note } from '../../models';
-import { authMiddleware } from '../../utils/auth';
+import Note from '../../models/Note.js';
+import auth from '../../utils/auth.js';
+const { authMiddleware } = auth;
 
 const router = Router();
 

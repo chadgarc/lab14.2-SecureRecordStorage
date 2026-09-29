@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { User } from '../../models';
-import { signToken } from '../../utils/auth';
+import User from '../../models/User.js';
+import auth from '../../utils/auth.js';
+const { signToken } = auth;
 
 const router = Router();
 
@@ -11,7 +12,17 @@ router.post('/register', async (req, res) => {
         const token = signToken(user);
         res.status(201).json({ token, user });
     } catch (err) {
-        res.status(400).json(err);
+        console.error('Registration error:', err);
+        // Handle Mongoose validation errors
+        if (err.name === 'ValidationError') {
+            const messages = Object.values(err.errors).map(e => e.message);
+            return res.status(400).json({ message: messages.join(', ') });
+        }
+        // Handle duplicate key errors (email/username already exists)
+        if (err.code === 11000) {
+            return res.status(400).json({ message: 'Email or username already exists' });
+        }
+        res.status(400).json({ message: err.message || 'Registration failed' });
     }
 });
 

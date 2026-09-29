@@ -1,10 +1,10 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import path from 'path';
-import db from './config/connection';
-import routes from './routes';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import connectDB from './config/connection.js';
+import routes from './routes/index.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,6 +19,6 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(routes);
 
-db.once('open', () => {
+connectDB().then(() => {
     app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
 });
